@@ -1,0 +1,10 @@
+.idea/
+.gradle/
+gradle/
+topics/
+build.gradle
+course-info.yaml
+course-remote-info.yaml
+gradlew
+gradlew.bat
+settings.gradle
