@@ -1,10 +1,10 @@
 package cinema;
 
-class TicketInfo {
+class RequestedTicket {
     Integer row;
     Integer column;
 
-    TicketInfo() {
+    RequestedTicket() {
     }
 
     public Integer getRow() {
