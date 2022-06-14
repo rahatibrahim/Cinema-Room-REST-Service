@@ -2,14 +2,14 @@ package cinema;
 
 import java.util.UUID;
 
-class TicketWithToken {
+class TicketWithTokenBody {
     UUID token;
     Seats ticket;
 
-    TicketWithToken() {
+    TicketWithTokenBody() {
     }
 
-    TicketWithToken(Seats s) {
+    TicketWithTokenBody(Seats s) {
         this.ticket = s;
         this.token = UUID.randomUUID();
     }

@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 class Controller {
     Room Theater1 = new Room(9, 9);
     CopyOnWriteArrayList<Seats> available_seats = Theater1.available_seats;
-    CopyOnWriteArrayList<TicketWithToken> handed_ticket_with_tokens = new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<TicketWithTokenBody> handed_ticket_with_tokens = new CopyOnWriteArrayList<>();
 
     @GetMapping("/seats")
     public Room getInformation() {
@@ -40,7 +40,7 @@ class Controller {
         for (Seats s : available_seats) {
             if (s.getRow() == row && s.getColumn() == column) {
                 available_seats.remove(s);
-                TicketWithToken t = new TicketWithToken(s);
+                TicketWithTokenBody t = new TicketWithTokenBody(s);
                 handed_ticket_with_tokens.add(t);
                 return ResponseEntity.ok().body(t);
             }
@@ -55,7 +55,7 @@ class Controller {
     public ResponseEntity<Object> returnTicket(@RequestBody TokenBody refundedToken) {
         try {
             UUID refundedTokenUUID = UUID.fromString(refundedToken.token);
-            for (TicketWithToken t : handed_ticket_with_tokens) {
+            for (TicketWithTokenBody t : handed_ticket_with_tokens) {
                 if (t.token.compareTo(refundedTokenUUID) == 0) {
                     handed_ticket_with_tokens.remove(t);
                     available_seats.add(t.ticket);
