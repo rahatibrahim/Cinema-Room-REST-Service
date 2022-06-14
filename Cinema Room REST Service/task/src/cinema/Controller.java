@@ -2,25 +2,24 @@ package cinema;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
 @RestController
 class Controller {
-    Room Theater1 = new Room(9, 9);
-    CopyOnWriteArrayList<Seats> available_seats = Theater1.available_seats;
+    Room theater = new Room(9, 9);
+    StatsBody stats = new StatsBody(theater);
+    CopyOnWriteArrayList<Seats> available_seats = theater.available_seats;
     CopyOnWriteArrayList<TicketWithTokenBody> handed_ticket_with_tokens = new CopyOnWriteArrayList<>();
 
     @GetMapping("/seats")
     public Room getInformation() {
-        return Theater1;
+        return theater;
     }
 
     @PostMapping("/purchase")
@@ -40,6 +39,7 @@ class Controller {
         for (Seats s : available_seats) {
             if (s.getRow() == row && s.getColumn() == column) {
                 available_seats.remove(s);
+                stats.updateStatsBody(s, "sold");
                 TicketWithTokenBody t = new TicketWithTokenBody(s);
                 handed_ticket_with_tokens.add(t);
                 return ResponseEntity.ok().body(t);
@@ -59,6 +59,7 @@ class Controller {
                 if (t.token.compareTo(refundedTokenUUID) == 0) {
                     handed_ticket_with_tokens.remove(t);
                     available_seats.add(t.ticket);
+                    stats.updateStatsBody(t.ticket, "returned");
                     ReturnedTicketBody body = new ReturnedTicketBody(t.ticket);
                     return ResponseEntity.ok().body(body);
                 }
@@ -70,5 +71,16 @@ class Controller {
         return new ResponseEntity<>(Map.of(
                 "error", "Wrong token!"),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/stats")
+    public ResponseEntity<Object> seeStats(@RequestParam Optional<String> password) {
+        if (password.isPresent()) {
+            return ResponseEntity.ok().body(stats);
+        }
+
+        return new ResponseEntity<>(Map.of(
+                "error", "The password is wrong!"),
+                HttpStatus.UNAUTHORIZED);
     }
 }
