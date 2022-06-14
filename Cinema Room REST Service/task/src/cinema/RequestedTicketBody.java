@@ -1,10 +1,10 @@
 package cinema;
 
-class RequestedTicket {
+class RequestedTicketBody {
     Integer row;
     Integer column;
 
-    RequestedTicket() {
+    RequestedTicketBody() {
     }
 
     public Integer getRow() {

@@ -11,38 +11,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class TicketWithToken {
-    UUID token;
-    Seats ticket;
-
-    TicketWithToken() {
-    }
-
-    TicketWithToken(Seats s) {
-        this.ticket = s;
-        this.token = UUID.randomUUID();
-    }
-
-    public UUID getToken() {
-        return token;
-    }
-
-    public void setToken(UUID token) {
-        this.token = token;
-    }
-
-    public Seats getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Seats ticket) {
-        this.ticket = ticket;
-    }
-}
-
-class Returned_ticket {
-
-}
 
 @RestController
 class Controller {
@@ -56,7 +24,7 @@ class Controller {
     }
 
     @PostMapping("/purchase")
-    public ResponseEntity<Object> purchaseTicket(@RequestBody RequestedTicket tickets) {
+    public ResponseEntity<Object> purchaseTicket(@RequestBody RequestedTicketBody tickets) {
         Integer row = tickets.getRow();
         Integer column = tickets.getColumn();
         if (row == null
