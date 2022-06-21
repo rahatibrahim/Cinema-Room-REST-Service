@@ -1,6 +1,5 @@
 .idea/
 .gradle/
-gradle/
 topics/
 build.gradle
 course-info.yaml
