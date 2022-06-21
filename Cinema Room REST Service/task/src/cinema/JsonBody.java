@@ -62,7 +62,7 @@ class TokenBody implements JsonBody {
     }
 }
 
-class TicketWithTokenBody {
+class TicketWithTokenBody implements JsonBody {
     UUID token;
     Seats ticket;
 
